@@ -9,17 +9,20 @@ app:
   volumes_from:
     - appdata
   ports:
-    - 8000:80
+    - 80:80
 
 appdata:
   image: tianon/true
   volumes:
     - /srv/www
-#    - ~/.composer:/var/www/.composer
-#    - ./www/app/code:/srv/www/app/code
+    - ~/.composer:/root/.composer
+    - ~/.ssh:/root/.ssh
+    - ~/.composer:/var/www/.composer
+    - ~/.ssh:/var/www/.ssh
+    #- ./www:/srv/www
 
 phpfpm:
-  image: mageinferno/magento2-php:7.0.5-fpm-0
+  image: komplizierte/docker-magento2-php
   links:
     - db
   volumes_from:
@@ -43,7 +46,7 @@ dbdata:
     - /var/lib/mysql
 
 setup:
-  image: mageinferno/magento2-php:7.0.5-fpm-0
+  image: komplizierte/docker-magento2-php
   command: /usr/local/bin/mage-setup
   links:
     - db
@@ -54,12 +57,15 @@ setup:
     - M2SETUP_DB_NAME=magento2
     - M2SETUP_DB_USER=magento2
     - M2SETUP_DB_PASSWORD=magento2
-    - M2SETUP_BASE_URL=http://m2.localhost:8000/
+    - M2SETUP_BASE_URL=http://m2.docker/
     - M2SETUP_ADMIN_FIRSTNAME=Admin
     - M2SETUP_ADMIN_LASTNAME=User
     - M2SETUP_ADMIN_EMAIL=dummy@gmail.com
     - M2SETUP_ADMIN_USER=magento2
     - M2SETUP_ADMIN_PASSWORD=magento2
-    - M2SETUP_VERSION=2.0.5
-    - M2SETUP_USE_SAMPLE_DATA=false
-    - M2SETUP_USE_ARCHIVE=true
+    - M2SETUP_VERSION=2.0.7
+    - APP_MAGE_MODE=developer
+    - M2SETUP_USE_SAMPLE_DATA=true
+    - M2SETUP_USE_ARCHIVE=false
+    - M2SETUP_PROJECT_CUSTOM=true
+    - M2SETUP_PROJECT_URL=git@github.com:dimasch/magento2-project-community-edition.git
