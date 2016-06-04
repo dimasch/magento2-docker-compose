@@ -10,6 +10,8 @@ app:
     - appdata
   ports:
     - 80:80
+  environment:
+    - APP_MAGE_MODE=developer
 
 appdata:
   image: tianon/true
@@ -19,7 +21,7 @@ appdata:
     - ~/.ssh:/root/.ssh
     - ~/.composer:/var/www/.composer
     - ~/.ssh:/var/www/.ssh
-    #- ./www:/srv/www
+    - ./www:/srv/www
 
 phpfpm:
   image: komplizierte/docker-magento2-php
@@ -27,6 +29,8 @@ phpfpm:
     - db
   volumes_from:
     - appdata
+  environment:
+    - APP_MAGE_MODE=developer
 
 db:
   image: mariadb:10.1.13
@@ -67,5 +71,5 @@ setup:
     - APP_MAGE_MODE=developer
     - M2SETUP_USE_SAMPLE_DATA=true
     - M2SETUP_USE_ARCHIVE=false
-    - M2SETUP_PROJECT_CUSTOM=true
+    - M2SETUP_PROJECT_CUSTOM=false
     - M2SETUP_PROJECT_URL=git@github.com:dimasch/magento2-project-community-edition.git
