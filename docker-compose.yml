@@ -21,7 +21,7 @@ appdata:
     - ~/.ssh:/root/.ssh
     - ~/.composer:/var/www/.composer
     - ~/.ssh:/var/www/.ssh
-    - ./www:/srv/www
+    #- ./www/app/design/frontend/Vendor/theme:/srv/www/app/design/frontend/Vendor/theme
 
 phpfpm:
   image: komplizierte/docker-magento2-php
@@ -71,5 +71,6 @@ setup:
     - APP_MAGE_MODE=developer
     - M2SETUP_USE_SAMPLE_DATA=true
     - M2SETUP_USE_ARCHIVE=false
+    #- M2SETUP_REMOVE_PACKAGE=vendor/module
     - M2SETUP_PROJECT_CUSTOM=false
     - M2SETUP_PROJECT_URL=git@github.com:dimasch/magento2-project-community-edition.git
