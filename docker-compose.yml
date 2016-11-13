@@ -10,21 +10,26 @@ app:
     - appdata
   ports:
     - 8000:80
+  environment:
+    - APP_MAGE_MODE=developer
 
 appdata:
   image: tianon/true
   volumes:
-    - /var/www/html
-#    - ~/.composer:/var/www/.composer
+    - /var/www/html        
+    - ~/.composer:/var/www/.composer    
+    - ~/.ssh:/var/www/.ssh 
 #    - ./html/app/code:/var/www/html/app/code
 #    - ./html/app/design:/var/www/html/app/design
 
 phpfpm:
-  image: mageinferno/magento2-php:7.0-fpm-0
+  image: komplizierte/docker-magento2-php:7.0-fpm-0
   links:
     - db
   volumes_from:
     - appdata
+  environment:
+    - APP_MAGE_MODE=developer
 
 db:
   image: percona:5.7
@@ -44,7 +49,7 @@ dbdata:
     - /var/lib/mysql
 
 setup:
-  image: mageinferno/magento2-php:7.0-fpm-0
+  image: komplizierte/docker-magento2-php:7.0-fpm-0
   command: /usr/local/bin/mage-setup
   links:
     - db
@@ -62,5 +67,6 @@ setup:
     - M2SETUP_ADMIN_USER=magento2
     - M2SETUP_ADMIN_PASSWORD=magento2
     - M2SETUP_VERSION=2.1.2
+    - APP_MAGE_MODE=developer
     - M2SETUP_USE_SAMPLE_DATA=false
-    - M2SETUP_USE_ARCHIVE=true
+    - M2SETUP_USE_ARCHIVE=false    
