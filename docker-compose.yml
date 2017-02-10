@@ -6,26 +6,36 @@ app:
   links:
     - phpfpm
     - db
+    - elasticsearch
   volumes_from:
     - appdata
   ports:
-    - 8000:80
+    - 80:80
   environment:
     - APP_MAGE_MODE=developer
 
 appdata:
   image: tianon/true
   volumes:
-    - /var/www/html        
+    - /var/www/html
+    - ./html:/var/www/html
     - ~/.composer:/var/www/.composer    
-    - ~/.ssh:/var/www/.ssh 
-#    - ./html/app/code:/var/www/html/app/code
-#    - ./html/app/design:/var/www/html/app/design
+    - ~/.ssh:/var/www/.ssh
+    #- ./html/app/code:/var/www/html/app/code
+    #- ./html/app/design:/var/www/html/app/design
+    #- ./html/composer.json:/var/www/html/composer.json
+    #- ./html/dev/tools/grunt/configs:/var/www/html/dev/tools/grunt/configs
+
+elasticsearch:
+  image: elasticsearch-with-plugin
+  ports:
+    - "9200:9200"
 
 phpfpm:
   image: komplizierte/docker-magento2-php:7.0-fpm-0
   links:
     - db
+    - elasticsearch
   volumes_from:
     - appdata
   environment:
@@ -53,6 +63,7 @@ setup:
   command: /usr/local/bin/mage-setup
   links:
     - db
+    - elasticsearch
   volumes_from:
     - appdata
   environment:
@@ -60,7 +71,7 @@ setup:
     - M2SETUP_DB_NAME=magento2
     - M2SETUP_DB_USER=magento2
     - M2SETUP_DB_PASSWORD=magento2
-    - M2SETUP_BASE_URL=http://m2.localhost:8000/
+    - M2SETUP_BASE_URL=http://m.local/
     - M2SETUP_ADMIN_FIRSTNAME=Admin
     - M2SETUP_ADMIN_LASTNAME=User
     - M2SETUP_ADMIN_EMAIL=dummy@gmail.com
@@ -69,4 +80,6 @@ setup:
     - M2SETUP_VERSION=2.1.2
     - APP_MAGE_MODE=developer
     - M2SETUP_USE_SAMPLE_DATA=false
-    - M2SETUP_USE_ARCHIVE=false    
+    - M2SETUP_USE_ARCHIVE=false
+    #- M2SETUP_PROJECT_URL=git@bitbucket.org:team/project.git
+    #- M2SETUP_CHECKOUT_BRANCH=custom-branch
