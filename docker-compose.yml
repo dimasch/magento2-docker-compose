@@ -23,7 +23,6 @@ appdata:
     - ~/.ssh:/var/www/.ssh
     #- ./html/app/code:/var/www/html/app/code
     #- ./html/app/design:/var/www/html/app/design
-    #- ./html/composer.json:/var/www/html/composer.json
     #- ./html/dev/tools/grunt/configs:/var/www/html/dev/tools/grunt/configs
 
 elasticsearch:
