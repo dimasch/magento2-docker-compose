@@ -21,6 +21,7 @@ appdata:
     - ./html:/var/www/html
     - ~/.composer:/var/www/.composer    
     - ~/.ssh:/var/www/.ssh
+    #- ~/.git:/var/www/html/.git
     #- ./html/app/code:/var/www/html/app/code
     #- ./html/app/design:/var/www/html/app/design
     #- ./html/dev/tools/grunt/configs:/var/www/html/dev/tools/grunt/configs
