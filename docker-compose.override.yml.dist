@@ -5,19 +5,17 @@
 #
 # Example showing how you can enable composer support in this file:
 #
-#version: "3"
-#
-#services:
-#  app:
-#    volumes: &appvolumes
-#      - appdata:/var/www/html
-#      - ~/.composer:/var/www/.composer
-#      - ./html/app/code:/var/www/html/app/code
-#      - ./html/app/design:/var/www/html/app/design 
-#
-#  phpfpm:
-#    volumes: *appvolumes
-#
-#  setup:
-#    environment:
-#      - M2SETUP_USE_ARCHIVE=false
+version: "3"
+
+services:
+  app:
+    volumes: &appvolumes
+      - ~/.composer:/var/www/.composer
+      - ./html/composer.json:/var/www/html/composer.json
+      - ~/.ssh:/var/www/.ssh
+      - ./html/dev/tools/grunt/configs/themes.js:/var/www/html/dev/tools/grunt/configs/themes.js
+      - ./html/app/code:/var/www/html/app/code
+      - ./html/app/design:/var/www/html/app/design
+
+  phpfpm:
+    volumes: *appvolumes

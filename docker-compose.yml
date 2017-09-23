@@ -12,7 +12,7 @@ services:
     volumes: &appvolumes
       - appdata:/var/www/html
     ports:
-      - 8000:80
+      - 80:80
     networks: &appnetworks
       - www
 
@@ -22,6 +22,8 @@ services:
       - db
     volumes: *appvolumes
     networks: *appnetworks
+    environment:
+      - APP_MAGE_MODE=developer
 
   db:
     image: percona:5.7
@@ -40,6 +42,8 @@ services:
     volumes: *appvolumes
     networks: *appnetworks
     env_file: env/setup.env
+    environment:
+      - APP_MAGE_MODE=developer
 
 volumes:
   dbdata:
