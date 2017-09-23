@@ -10,6 +10,8 @@ This file is provided as an example development environment using Mage Inferno M
 
 ## Composer Setup
 
+### Authentication
+
 Uncomment the composer line from `appdata` to mount a `.composer` directory to the `www-data` user home directory. Please first setup Magento Marketplace authentication (details at <a href="http://devdocs.magento.com/guides/v2.0/install-gde/prereq/connect-auth.html" target="_blank">http://devdocs.magento.com/guides/v2.0/install-gde/prereq/connect-auth.html</a>).
 
 Place your auth token at `~/.composer/auth.json` with the following contents, like so:
@@ -25,7 +27,11 @@ Place your auth token at `~/.composer/auth.json` with the following contents, li
 }
 ```
 
-Then, just set `M2SETUP_USE_ARCHIVE` to `false` in your docker-compose.yml file.
+Then, just set `M2SETUP_USE_ARCHIVE` to `false` in your docker-compose.yml file. 
+
+### Magento Enterprise 
+
+You can install Magento Enterprise via Composer by setting `M2SETUP_USE_COMPOSER_ENTERPRISE=true` in your docker-compose.yml file.
 
 ## Composer-less, No-Auth Setup
 
@@ -49,7 +55,7 @@ Your Magento source data is persistently stored within Docker data volumes. For 
 docker cp CONTAINERID:/var/www/html ./
 ```
 
-Then, just uncomment the `./html/app/code:/var/www/html/app/code` and `./html/app/code:/var/www/html/app/code` lines within your docker-compose.yml file (appdata > volumes). This mounts your local `app/code` and `app/design` directories to the Docker data volume. Then, just restart your containers:
+Then, just uncomment the `./html/app/code:/var/www/html/app/code` and `./html/app/design:/var/www/html/app/design` lines within your docker-compose.override.yml file (appdata > volumes). This mounts your local `app/code` and `app/design` directories to the Docker data volume. Then, just restart your containers:
 
 ```
 docker-compose up -d app
@@ -66,6 +72,7 @@ docker-compose exec phpfpm ./bin/magento
 ```
 
 or with straight Docker command:
+
 ```
 docker exec NAME_OF_PHPFPM_CONTAINER ./bin/magento
 ```
@@ -80,3 +87,29 @@ This will allow you to clear the cache by running the following command right in
 ```
 magento cache:flush
 ```
+
+## Docker Compose Override
+
+You can copy `docker-compose.override.yml.dist` to `docker-compose.override.yml` and adjust environment variables, volume mounts etc in the `docker-compose.override.yml` file to avoid losing local configuration changes when you pull changes to this repository. 
+
+Docker Compose will automatically read any of the values you define in the file. See [this link](https://docs.docker.com/compose/extends/#/understanding-multiple-compose-files) for more information about the override file. 
+
+
+## Troubleshooting
+
+### Setup Error
+
+A common error when running setup is receiving this error:
+
+```
+SQLSTATE[HY000] [2002] Connection refused
+
+  [InvalidArgumentException]
+  Parameter validation failed
+```
+
+If you receive this error, it's because the database driver has not initialized before the setup script commences execution. The easy fix for this is to run the setup command again immediately after this error:
+
+### PHP 7.1 Unusable
+
+[PHP 7.1 will not be supported until Magento 2.2](https://github.com/magento/magento2/issues/5880)
