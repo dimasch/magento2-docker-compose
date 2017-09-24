@@ -4,6 +4,9 @@ docker-compose stop
 docker-compose rm -f
 docker volume prune -f
 
+rm -f docker-compose.override.yml
+rm -fr ./html
+
 echo "Copy setup config.."
 cp -f docker-compose.override.yml.setup docker-compose.override.yml
 
