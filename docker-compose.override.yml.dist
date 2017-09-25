@@ -16,6 +16,7 @@ services:
       - ./html/dev/tools/grunt/configs/themes.js:/var/www/html/dev/tools/grunt/configs/themes.js
       - ./html/app/code:/var/www/html/app/code
       - ./html/app/design:/var/www/html/app/design
+      - ./html/app/i18n:/var/www/html/app/i18n
 
   phpfpm:
     volumes: *appvolumes
